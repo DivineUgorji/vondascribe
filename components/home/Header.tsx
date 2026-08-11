@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { Show, UserButton } from "@clerk/nextjs";
 import EchonoteDot from "../icons/EchonoteDot";
-import { Show, SignUpButton, UserButton } from "@clerk/nextjs";
+import { ModeToggleButton } from "../ModeToggleButton";
 
 const NavLink = ({
   href,
@@ -9,50 +10,53 @@ const NavLink = ({
   href: string;
   children: React.ReactNode;
 }) => {
-  return <Link href={href}>{children}</Link>;
+  return (
+    <Link
+      href={href}
+      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+    >
+      {children}
+    </Link>
+  );
 };
 
 export default function Header() {
   return (
-    <nav className="container mx-auto flex items-center justify-between px-8 py-4 ">
-      <div>
-        <NavLink href="#">
-          <div className="flex lg:flex-1 gap-2 justify-center items-center">
-            <EchonoteDot />
-            <p className="font-heading font-bold text-black text-lg tracking-wide">
-              Echo<span className="text-teal">Note</span>
-            </p>
-          </div>
-        </NavLink>
-      </div>
+    <header className="border-b border-stone-faint">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center px-4 lg:px-8">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 lg:flex-1">
+          <EchonoteDot />
+          <span className="text-lg font-semibold">EchoNote</span>
+        </Link>
 
-      <div
-        className="flex lg:justify-center
-          gap-2 lg:gap-12 lg:items-center"
-      >
-        <NavLink href="#pricing">Pricing</NavLink>
-        <Show when="signed-in">
-          <NavLink href="/#posts">Your posts</NavLink>
-        </Show>
-      </div>
-
-      <div className="flex lg:justify-end lg:flex-1">
-        <div className="flex gap-2 items-center">
-          <Show when="signed-in">
-            <NavLink href="/dashboard">Upload file</NavLink>
+        {/* Navigation */}
+        <div className="flex items-center gap-2 lg:gap-4">
+          {/* Signed out */}
+          <Show when="signed-out">
+            <NavLink href="#pricing">Pricing</NavLink>
+            <NavLink href="/sign-in">Sign in</NavLink>
           </Show>
-          {/* {profile would sty here} */}
+
+          {/* Signed in */}
           <Show when="signed-in">
+            <NavLink href="/posts">Your posts</NavLink>
+            <NavLink href="/dashboard">Upload file</NavLink>
+            {/* <SignOutButton>
+              <button
+                type="button"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Sign out
+              </button>
+            </SignOutButton> */}
             <UserButton />
           </Show>
-        </div>
 
-        <Show when="signed-out">
-          <NavLink href="/sign-in">Sign in</NavLink>
-          {/* <SignInButton /> */}
-          <SignUpButton />
-        </Show>
-      </div>
-    </nav>
+          {/* Always visible */}
+          <ModeToggleButton />
+        </div>
+      </nav>
+    </header>
   );
 }

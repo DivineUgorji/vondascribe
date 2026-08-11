@@ -2,38 +2,35 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-
 import { HowItWorksSteps as steps } from "@/lib/content";
 
-/* ── Shared easing */
+/* Shared easing */
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/*  Connector line between steps  */
+/* Connector line between steps */
 function Connector({ delay, inView }: { delay: number; inView: boolean }) {
   return (
-    <div className="hidden lg:flex flex-1 items-center px-2 -mt-15]">
-      <div className="relative w-full h-px bg-teal-mist overflow-hidden">
+    <div className="hidden lg:flex flex-1 items-center px-2 -mt-8">
+      <div className="relative w-full h-px bg-border overflow-hidden">
         <motion.div
           initial={{ scaleX: 0 }}
           animate={inView ? { scaleX: 1 } : {}}
           transition={{ duration: 0.8, ease, delay }}
-          className="absolute inset-0 bg-teal origin-left"
+          className="absolute inset-0 bg-border origin-left"
         />
-        {/* Animated dot traveling along the line */}
         <motion.div
           initial={{ x: "-100%" }}
           animate={inView ? { x: "100%" } : {}}
           transition={{ duration: 1.2, ease, delay: delay + 0.2 }}
-          className="absolute top-1/2 -translate-y-1/2 size-1.5 rounded-full bg-teal"
+          className="absolute top-1/2 -translate-y-1/2 size-1.5 rounded-full bg-muted-foreground"
         />
       </div>
-      {/* Arrow head */}
-      <div className="size-1.5 border-t border-r border-teal rotate-45 -ml-1 shrink-0" />
+      <div className="size-1.5 border-t border-r border-border rotate-45 -ml-1 shrink-0" />
     </div>
   );
 }
 
-/*  Step card  */
+/* Step card */
 function StepCard({
   icon: Icon,
   step,
@@ -59,30 +56,28 @@ function StepCard({
       className="group relative flex flex-col items-center text-center lg:items-start lg:text-left w-full lg:max-w-70"
     >
       {/* Step number — large watermark */}
-      <div className="absolute -top-4 -left-2 text-[80px] font-bold text-teal/5 font-plusJakarta leading-none select-none hidden lg:block">
+      <div className="absolute -top-4 -left-2 text-[80px] font-bold text-foreground/5 leading-none select-none hidden lg:block">
         {step}
       </div>
 
       {/* Icon container */}
       <div className="relative mb-6">
-        {/* Outer ring */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={inView ? { scale: 1, opacity: 1 } : {}}
           transition={{ duration: 0.5, ease, delay: delay + 0.1 }}
-          className="size-16 rounded-2xl bg-teal-surface border border-teal-mist flex items-center justify-center
-            group-hover:bg-teal group-hover:border-teal transition-all duration-300
-            shadow-[0_4px_20px_rgba(13,148,136,0.10)] group-hover:shadow-[0_8px_32px_rgba(13,148,136,0.22)]"
+          className="size-16 rounded-2xl bg-muted border border-border flex items-center justify-center
+            group-hover:border-border-faint transition-all duration-300"
         >
           <Icon
-            className="size-6 text-teal group-hover:text-white transition-colors duration-300"
+            className="size-6 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
             strokeWidth={1.6}
           />
         </motion.div>
 
-        {/* Step badge */}
-        <div className="absolute -top-2 -right-2 size-5 rounded-full bg-teal flex items-center justify-center">
-          <span className="text-[9px] font-bold text-white font-plusJakarta">
+        {/* Step badge — primary used surgically */}
+        <div className="absolute -top-2 -right-2 size-5 rounded-full bg-primary flex items-center justify-center">
+          <span className="text-[9px] font-bold text-primary-foreground">
             {step.replace("0", "")}
           </span>
         </div>
@@ -90,7 +85,7 @@ function StepCard({
 
       {/* Text */}
       <div className="flex flex-col gap-2.5">
-        <h3 className="text-[17px] font-semibold text-foreground font-plusJakarta tracking-[-0.02em]">
+        <h3 className="text-[17px] font-semibold text-foreground tracking-[-0.02em]">
           {title}
         </h3>
         <p className="text-[13px] text-muted-foreground leading-[1.75] m-0 max-w-60">
@@ -99,7 +94,7 @@ function StepCard({
 
         {/* Detail pill */}
         <div className="mt-1 inline-flex self-center lg:self-start">
-          <span className="text-[11px] font-medium text-teal bg-teal-surface border border-teal-mist px-3 py-1 rounded-full">
+          <span className="text-[11px] font-medium text-muted-foreground bg-muted border border-border px-3 py-1 rounded-full">
             {detail}
           </span>
         </div>
@@ -108,7 +103,7 @@ function StepCard({
   );
 }
 
-/*  Main component */
+/* Main component */
 export default function HowItWorks() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -116,22 +111,10 @@ export default function HowItWorks() {
   return (
     <section
       ref={ref}
-      className="relative w-full  py-9 md:py-18 px-6 overflow-hidden"
+      className="relative w-full py-9 md:py-18 px-6 overflow-hidden"
     >
-      {/*  Background embellishments */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-100 rounded-full bg-teal/4 blur-[120px]" />
-
-      {/* Dot grid */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-30"
-        style={{
-          backgroundImage: "radial-gradient(#C8E6E4 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-
       <div className="relative max-w-5xl mx-auto">
-        {/*  Section header  */}
+        {/* Section header */}
         <div className="mb-20 flex flex-col items-center text-center">
           {/* Eyebrow */}
           <motion.div
@@ -140,8 +123,8 @@ export default function HowItWorks() {
             transition={{ duration: 0.5, ease, delay: 0 }}
             className="mb-4"
           >
-            <span className="inline-flex items-center gap-2 text-[11px] font-medium text-teal bg-teal-surface border border-teal-mist px-3 py-1.5 rounded-full tracking-[0.06em] uppercase">
-              <span className="size-1.5 rounded-full bg-teal animate-pulse" />
+            <span className="inline-flex items-center gap-2 text-[11px] font-medium text-muted-foreground bg-muted border border-border px-3 py-1.5 rounded-full tracking-[0.06em] uppercase">
+              <span className="size-1.5 rounded-full bg-primary animate-pulse" />
               How it works
             </span>
           </motion.div>
@@ -154,7 +137,7 @@ export default function HowItWorks() {
             className="text-3xl md:text-4xl font-semibold leading-[1.2] tracking-[-0.03em] text-foreground max-w-lg mb-4"
           >
             Three steps from{" "}
-            <span className="text-teal">recording to published</span>
+            <span className="text-primary">recording to published</span>
           </motion.h2>
 
           {/* Subheading */}
@@ -169,25 +152,19 @@ export default function HowItWorks() {
           </motion.p>
         </div>
 
-        {/*  Steps wrapper  */}
+        {/* Steps wrapper */}
         <div className="relative">
-          {/* Outer card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, ease, delay: 0.15 }}
-            className="relative bg-white border border-teal-mist rounded-3xl px-10 py-14 overflow-hidden
-              shadow-[0_4px_40px_rgba(13,148,136,0.07)]"
+            className="relative bg-card border border-border rounded-3xl px-10 py-14 overflow-hidden"
           >
-            {/* Inner background accent */}
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(13,148,136,0.03),transparent_70%)]" />
-
             {/* Steps row */}
             <div className="relative flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-0">
               {steps.map((step, i) => (
-                <>
+                <div key={step.step} className="contents">
                   <StepCard
-                    key={step.step}
                     icon={step.icon}
                     step={step.step}
                     title={step.title}
@@ -197,13 +174,9 @@ export default function HowItWorks() {
                     inView={inView}
                   />
                   {i < steps.length - 1 && (
-                    <Connector
-                      key={`conn-${i}`}
-                      delay={0.45 + i * 0.12}
-                      inView={inView}
-                    />
+                    <Connector delay={0.45 + i * 0.12} inView={inView} />
                   )}
-                </>
+                </div>
               ))}
             </div>
           </motion.div>
@@ -219,7 +192,7 @@ export default function HowItWorks() {
               Ready to try it?{" "}
               <a
                 href="#"
-                className="text-teal font-medium underline-offset-4 hover:underline transition-all"
+                className="text-primary font-medium underline-offset-4 hover:underline transition-all"
               >
                 Start for free — no credit card required.
               </a>

@@ -1,25 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { DM_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/home/Header";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({
-  variable: "--font-inter",
+const DMSans = DM_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plusJakarta",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const mono = JetBrains_Mono({
+const Dm_Mono = DM_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -36,11 +31,19 @@ export default function RootLayout({
     <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up">
       <html
         lang="en"
-        className={`${inter.variable} ${plusJakarta.variable} ${mono.variable} h-full antialiased`}
+        className={`${DMSans.variable} ${Dm_Mono.variable} h-full antialiased`}
+        suppressHydrationWarning
       >
         <body className="min-h-full flex flex-col">
-          <Header></Header>
-          <main>{children}</main>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header></Header>
+            <main>{children}</main>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
