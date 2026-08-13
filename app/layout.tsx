@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { DM_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/home/Header";
+// import Header from "@/components/home/Header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const DMSans = DM_Sans({
   variable: "--font-sans",
@@ -41,8 +42,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Header></Header>
-            <main>{children}</main>
+            <main>
+              {children}
+              <Toaster />
+            </main>
           </ThemeProvider>
         </body>
       </html>

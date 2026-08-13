@@ -61,27 +61,27 @@ function FloatingPill({
 }
 
 /*  Animated waveform  */
-function Waveform({ className }: { className?: string }) {
-  const bars = [10, 20, 32, 18, 28, 40, 22, 36, 14, 30, 42, 24, 16, 34, 26];
-  return (
-    <div className={`flex items-center gap-0.75 ${className}`}>
-      {bars.map((h, i) => (
-        <motion.span
-          key={i}
-          className="block w-0.75 rounded-full bg-foreground/70"
-          style={{ height: h }}
-          animate={{ scaleY: [1, 1.5, 0.7, 1.3, 1] }}
-          transition={{
-            duration: 1.6,
-            repeat: Infinity,
-            delay: i * 0.08,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+// function Waveform({ className }: { className?: string }) {
+//   const bars = [10, 20, 32, 18, 28, 40, 22, 36, 14, 30, 42, 24, 16, 34, 26];
+//   return (
+//     <div className={`flex items-center gap-0.75 ${className}`}>
+//       {bars.map((h, i) => (
+//         <motion.span
+//           key={i}
+//           className="block w-0.75 rounded-full bg-foreground/70"
+//           style={{ height: h }}
+//           animate={{ scaleY: [1, 1.5, 0.7, 1.3, 1] }}
+//           transition={{
+//             duration: 1.6,
+//             repeat: Infinity,
+//             delay: i * 0.08,
+//             ease: "easeInOut",
+//           }}
+//         />
+//       ))}
+//     </div>
+//   );
+// }
 
 export default function Banner() {
   return (
@@ -163,7 +163,7 @@ export default function Banner() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
           >
-            <Waveform />
+            {/* <Waveform /> */}
           </motion.div>
         </div>
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { pricingPlanMap } from "@/lib/content";
+import { pricingPlanMap } from "@/lib/constants";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
