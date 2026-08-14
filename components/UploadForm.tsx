@@ -1,52 +1,16 @@
 "use client";
-import React, {
-  useActionState,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { UploadCloud, FileVideo, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
-import {
-  handleTranscribe,
-  type TranscribeState,
-} from "@/app/actions/handleFormAction";
+import { useUploadThing } from "@/utils/uploadthing";
 import { uploadFileSchema, formatBytes } from "@/lib/schemas/upload-schema";
+import { saveTranscription } from "@/app/actions/handleFormAction";
 
 const ACCEPTED_TYPES = "video/*, audio/*";
 
-const initialTranscribeState: TranscribeState = {
-  status: "idle",
-  message: "",
-};
-
-async function transcribeAction(
-  prevState: TranscribeState,
-  formData: FormData,
-): Promise<TranscribeState> {
-  const file = formData.get("file");
-  const result = uploadFileSchema.safeParse({ file });
-
-  if (!result.success) {
-    return {
-      status: "error",
-      message:
-        result.error.issues[0]?.message ?? "That file can't be uploaded.",
-    };
-  }
-
-  return handleTranscribe(prevState, formData);
-}
-
 export default function UploadForm() {
-  const [state, formAction, isPending] = useActionState(
-    transcribeAction,
-    initialTranscribeState,
-  );
-
   const [dragActive, setDragActive] = useState(false);
   const [form, setForm] = useState<{
     file: File | null;
@@ -54,6 +18,13 @@ export default function UploadForm() {
     notes: string;
   }>({ file: null, title: "", notes: "" });
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const { startUpload } = useUploadThing("videoOrImageUploader", {
+    onUploadError: (err) => {
+      toast.error(err.message ?? "Upload failed. Please try again.");
+    },
+  });
 
   const handleDrag = useCallback((e: React.DragEvent, active: boolean) => {
     e.preventDefault();
@@ -67,11 +38,6 @@ export default function UploadForm() {
     setDragActive(false);
     const dropped = e.dataTransfer.files?.[0];
     if (dropped) {
-      if (inputRef.current) {
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(dropped);
-        inputRef.current.files = dataTransfer.files;
-      }
       setForm((prev) => ({
         ...prev,
         file: dropped,
@@ -91,29 +57,60 @@ export default function UploadForm() {
     }
   };
 
-  const [prevStatus, setPrevStatus] = useState(state.status);
-  if (prevStatus !== state.status) {
-    setPrevStatus(state.status);
-    if (state.status === "success") {
-      setForm({ file: null, title: "", notes: "" });
-    }
-  }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    if (state.status === "success") {
-      toast.success(state.message);
-      if (inputRef.current) inputRef.current.value = "";
-    } else if (state.status === "error") {
-      toast.error(state.message);
+    if (!form.file) {
+      toast.error("Select a file before uploading.");
+      return;
     }
-  }, [state]);
+
+    const validated = uploadFileSchema.safeParse({ file: form.file });
+    if (!validated.success) {
+      toast.error(
+        validated.error.issues[0]?.message ?? "That file can't be uploaded.",
+      );
+      return;
+    }
+
+    const fileToUpload = form.file;
+    const { title, notes } = form;
+
+    startTransition(async () => {
+      const uploaded = await startUpload([fileToUpload]);
+
+      if (!uploaded || uploaded.length === 0) {
+        toast.error("Upload failed. Please try again.");
+        return;
+      }
+
+      const [{ ufsUrl, name, size }] = uploaded;
+
+      const result = await saveTranscription({
+        title,
+        notes,
+        fileUrl: ufsUrl,
+        fileName: name,
+        fileSize: size,
+      });
+
+      if (result.status === "error") {
+        toast.error(result.message);
+        return;
+      }
+
+      toast.success(result.message);
+      setForm({ file: null, title: "", notes: "" });
+      if (inputRef.current) inputRef.current.value = "";
+    });
+  };
 
   const { file, title, notes } = form;
 
   return (
     <form
       className="rounded-2xl border border-border bg-card p-6 lg:col-span-2"
-      action={formAction}
+      onSubmit={handleSubmit}
     >
       <h4 className="mb-4">Recording details</h4>
 
@@ -138,7 +135,6 @@ export default function UploadForm() {
           accept={ACCEPTED_TYPES}
           onChange={handleSelect}
           className="sr-only"
-          //   required
         />
 
         {!file ? (

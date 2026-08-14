@@ -1,32 +1,36 @@
 "use server";
 
-import { uploadFileSchema } from "@/lib/schemas/upload-schema";
+import { z } from "zod";
 
 export type TranscribeState = {
   status: "idle" | "success" | "error";
   message: string;
 };
 
-export async function handleTranscribe(
-  _prevState: TranscribeState,
-  formData: FormData,
+const metadataSchema = z.object({
+  title: z.string().trim().min(1, "Title is required"),
+  notes: z.string().optional(),
+  fileUrl: z.string().url(),
+  fileName: z.string(),
+  fileSize: z.number(),
+});
+
+export type TranscribeMetadata = z.infer<typeof metadataSchema>;
+
+export async function saveTranscription(
+  input: TranscribeMetadata,
 ): Promise<TranscribeState> {
-  const file = formData.get("file");
+  const validated = metadataSchema.safeParse(input);
 
-  const validatedFields = uploadFileSchema.safeParse({ file });
-
-  if (!validatedFields.success) {
-    const firstError = Object.values(
-      validatedFields.error.flatten().fieldErrors,
-    )[0]?.[0];
-
+  if (!validated.success) {
     return {
       status: "error",
-      message: firstError ?? "Something went wrong validating your file.",
+      message: validated.error.issues[0]?.message ?? "Invalid submission.",
     };
   }
 
-  // TODO: upload/transcription to be handled here
+  // TODO: persist a record and kick off transcription using
+  // validated.data.fileUrl
 
   return {
     status: "success",

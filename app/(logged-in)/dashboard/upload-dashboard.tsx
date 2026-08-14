@@ -46,7 +46,6 @@ export default function UploadDashboard({
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* ── Top nav */}
       <header className="border-b border-border-faint">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2">
@@ -88,7 +87,6 @@ export default function UploadDashboard({
         </div>
       </header>
 
-      {/* ── Main */}
       <main className="mx-auto max-w-6xl px-6 py-12">
         {hasCancelled && (
           <div className="mb-8 flex items-start gap-3 rounded-xl border border-primary/30 bg-accent px-4 py-3.5">
@@ -115,10 +113,8 @@ export default function UploadDashboard({
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {/* ── Upload card */}
           <UploadForm />
 
-          {/* ── Sidebar */}
           <aside className="flex flex-col gap-6">
             <div className="rounded-2xl border border-border bg-card p-6">
               <h5 className="mb-3">Before you upload</h5>
