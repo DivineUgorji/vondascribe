@@ -58,11 +58,14 @@ export default function UploadDashboard({
           </Link>
 
           <nav className="hidden items-center gap-6 md:flex">
-            <a href="#" className="text-sm font-medium text-foreground">
+            <a
+              href={"/dashboard"}
+              className="text-sm font-medium text-foreground"
+            >
               Dashboard
             </a>
             <a
-              href="#"
+              href={"/transcripts"}
               className="text-sm font-medium text-muted-foreground transition hover:text-foreground"
             >
               Transcripts

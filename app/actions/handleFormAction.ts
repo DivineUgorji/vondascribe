@@ -1,4 +1,5 @@
 "use server";
+import { generateBlogPostAction, transcribeUploadedFile } from "./uploadAction";
 
 import { z } from "zod";
 
@@ -13,6 +14,7 @@ const metadataSchema = z.object({
   fileUrl: z.string().url(),
   fileName: z.string(),
   fileSize: z.number(),
+  userId: z.string().min(1),
 });
 
 export type TranscribeMetadata = z.infer<typeof metadataSchema>;
@@ -29,8 +31,34 @@ export async function saveTranscription(
     };
   }
 
-  // TODO: persist a record and kick off transcription using
-  // validated.data.fileUrl
+  const { fileUrl, userId } = validated.data;
+
+  const result = await transcribeUploadedFile({ userId, fileUrl });
+  console.log("Result from transcribeUploadedFile:", result);
+  const { data = null, message = null } = result;
+
+  if (!data || !message) {
+    return {
+      status: "error",
+      message:
+        message ??
+        "An unexpected error during transcription, please try again.",
+    };
+  }
+
+  const blogResult = await generateBlogPostAction({
+    transcriptions: { text: data.text },
+    userId,
+  });
+
+  if (blogResult && blogResult.success === false) {
+    return {
+      status: "error",
+      message:
+        blogResult.message ??
+        "Transcription succeeded, but the blog post couldn't be generated.",
+    };
+  }
 
   return {
     status: "success",

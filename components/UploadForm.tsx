@@ -84,14 +84,31 @@ export default function UploadForm() {
         return;
       }
 
-      const [{ ufsUrl, name, size }] = uploaded;
+      // const [{ ufsUrl, name, size }] = uploaded;
+
+      const file = uploaded[0];
+      const fileUrl = file.ufsUrl;
+      const userId = file.serverData?.uploadedBy;
+
+      if (!userId) {
+        toast.error("Could not identify user. Please try again.");
+        return;
+      }
 
       const result = await saveTranscription({
+        // title,
+        // notes,
+        // fileUrl: ufsUrl,
+        // fileName: name,
+        // fileSize: size,
+        // userId,
+
         title,
         notes,
-        fileUrl: ufsUrl,
-        fileName: name,
-        fileSize: size,
+        fileUrl,
+        fileName: file.name,
+        fileSize: file.size,
+        userId,
       });
 
       if (result.status === "error") {
