@@ -257,3 +257,12 @@ html {
     @apply font-semibold text-foreground;
   }
 }
+/* Progress indicator for nav */
+@keyframes progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}

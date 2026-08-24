@@ -13,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
+import { TransitionLink } from "../navigation-progress";
 
 export type PlanType = "starter" | "basic" | "pro";
 
@@ -44,7 +45,7 @@ export default function AppHeader({ planType }: { planType: PlanType }) {
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 md:flex">
           {NAV_ITEMS.map((item) => (
-            <Link
+            <TransitionLink
               key={item.href}
               href={item.href}
               className={`text-sm font-medium transition ${
@@ -54,7 +55,7 @@ export default function AppHeader({ planType }: { planType: PlanType }) {
               }`}
             >
               {item.label}
-            </Link>
+            </TransitionLink>
           ))}
         </nav>
 

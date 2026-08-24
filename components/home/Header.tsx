@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
+import { LoadingLink } from "../LoadingLink";
 
 const NavLink = ({
   href,
@@ -59,7 +60,7 @@ export default function Header() {
           </Show>
 
           <Show when="signed-in">
-            <NavLink href="/dashboard">Go to dashboard</NavLink>
+            <LoadingLink href="/dashboard">Go to dashboard</LoadingLink>
             <UserButton />
           </Show>
 

@@ -5,6 +5,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { NavigationProgressProvider } from "@/components/navigation-progress";
 
 const DMSans = DM_Sans({
   variable: "--font-sans",
@@ -44,10 +45,8 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <main>
-              {children}
-              <Toaster />
-            </main>
+            <NavigationProgressProvider>{children}</NavigationProgressProvider>
+            <Toaster />
           </ThemeProvider>
         </ClerkProvider>
       </body>
