@@ -195,4 +195,65 @@ html {
   .eyebrow {
     @apply font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground;
   }
+
+  .markdown-content {
+    @apply mx-auto;
+  }
+
+  .markdown-content h1 {
+    @apply mt-8 mb-4 text-3xl font-semibold leading-[1.15] tracking-[-0.03em] text-foreground;
+  }
+
+  .markdown-content h2 {
+    @apply mt-6 mb-3 text-2xl font-semibold leading-[1.2] tracking-[-0.03em] text-foreground;
+  }
+
+  .markdown-content h3 {
+    @apply mt-4 mb-2 text-xl font-medium leading-snug tracking-[-0.02em] text-foreground;
+  }
+
+  .markdown-content p {
+    @apply mb-4 leading-[1.75] text-foreground/85;
+  }
+
+  .markdown-content ul,
+  .markdown-content ol {
+    @apply mb-4 pl-6;
+  }
+
+  .markdown-content li {
+    @apply mb-2 list-disc marker:text-primary;
+  }
+
+  .markdown-content ol li {
+    @apply list-decimal;
+  }
+
+  .markdown-content a {
+    @apply text-primary underline-offset-4 hover:underline;
+  }
+
+  .markdown-content blockquote {
+    @apply my-4 border-l-4 border-primary/40 pl-4 italic text-muted-foreground;
+  }
+
+  .markdown-content code {
+    @apply rounded border border-border-faint bg-muted px-1 py-0.5 font-mono text-sm text-foreground;
+  }
+
+  .markdown-content pre {
+    @apply my-4 overflow-x-auto rounded-xl border border-border bg-muted p-4;
+  }
+
+  .markdown-content pre code {
+    @apply border-0 bg-transparent p-0;
+  }
+
+  .markdown-content hr {
+    @apply my-8 border-border-faint;
+  }
+
+  .markdown-content strong {
+    @apply font-semibold text-foreground;
+  }
 }

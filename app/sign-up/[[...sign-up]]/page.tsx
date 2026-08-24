@@ -4,6 +4,31 @@ import EchonoteDot from "@/components/icons/EchonoteDot";
 import { SignUp } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 
+function WaveMotif({ className }: { className?: string }) {
+  const bars = [
+    10, 18, 28, 16, 34, 22, 40, 14, 30, 20, 36, 12, 26, 18, 32, 15, 24,
+  ];
+
+  return (
+    <div className={`flex items-end justify-center gap-1 ${className ?? ""}`}>
+      {bars.map((h, i) => (
+        <motion.span
+          key={i}
+          className="w-1 rounded-full bg-primary/50"
+          style={{ height: h }}
+          animate={{ scaleY: [1, 1.45, 0.75, 1.25, 1] }}
+          transition={{
+            duration: 1.8,
+            repeat: Infinity,
+            delay: i * 0.07,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function SignUpPage() {
   const leftStagger = {
     hidden: { opacity: 0 },
@@ -22,7 +47,6 @@ export default function SignUpPage() {
     },
   };
 
-  // Right side smooth simultaneous fade-up
   const rightItem = {
     hidden: { opacity: 0, y: 28 },
     visible: {
@@ -33,161 +57,176 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-teal-surface font-sans overflow-hidden relative">
-      {/* Global subtle texture */}
-      <div className="absolute inset-0 bg-[radial-gradient(#5DCAA520_1px,transparent_1px)] bg-size-[60px_60px] pointer-events-none" />
+    <div className="relative min-h-screen overflow-hidden bg-zinc-950 font-sans text-zinc-100">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[60px_60px]" />
 
-      <div className="min-h-screen flex flex-col lg:flex-row">
-        {/* Left Branding Panel – hidden on mobile */}
-        <div className="hidden lg:flex lg:w-1/2 bg-abyss relative overflow-hidden flex-col justify-center items-center p-12">
-          <div className="absolute inset-0 bg-[radial-gradient(at_30%_20%,var(--color-teal)_0%,transparent_50%)] opacity-20" />
+      <div className="flex min-h-screen flex-col lg:flex-row">
+        <div className="relative hidden flex-col items-center justify-center overflow-hidden bg-zinc-950 p-12 lg:flex lg:w-1/2 border-r border-white/10">
+          <div className="absolute inset-0 bg-[radial-gradient(at_30%_20%,hsl(var(--primary)/0.25)_0%,transparent_55%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(at_70%_80%,hsl(var(--primary)/0.12)_0%,transparent_50%)]" />
 
           <motion.div
-            className="relative z-10 text-center max-w-md"
+            className="relative z-10 max-w-md text-center"
             variants={leftStagger}
             initial="hidden"
             animate="visible"
           >
             <motion.div
               variants={leftItem}
-              className="flex items-center justify-center gap-2 mb-8"
+              className="mb-8 flex items-center justify-center gap-2"
             >
-              <EchonoteDot className="w-16 h-16" />
-              <h1 className="text-5xl font-bold text-white tracking-tighter">
-                EchoNote
+              <EchonoteDot className="h-14 w-14 text-primary" />
+              <h1 className="text-5xl font-bold tracking-tighter text-white">
+                VondaScribe
               </h1>
             </motion.div>
 
             <motion.h2
               variants={leftItem}
-              className="text-4xl font-semibold text-white leading-tight tracking-tight mb-6 font-sans"
+              className="mb-6 text-4xl font-semibold leading-tight tracking-tight text-white"
             >
               Turn your recordings into
               <br />
-              <span className="text-teal-light">clear, usable text</span>
+              <span className="text-primary">clear, usable text</span>
             </motion.h2>
 
             <motion.p
               variants={leftItem}
-              className="text-teal-100/80 text-lg leading-relaxed"
+              className="text-lg leading-relaxed text-zinc-400"
             >
-              EchoNote uses AI to transform audio and video into structured
+              VondaScribe uses AI to transform audio and video into structured
               transcripts you can edit, share, or publish.
             </motion.p>
           </motion.div>
 
-          {/* Left floating orbs */}
-          <div className="absolute bottom-12 left-12 w-24 h-24 border border-teal-400/20 rounded-full" />
-          <div className="absolute top-32 right-20 w-16 h-16 border border-teal-300/30 rounded-full" />
+          <div className="absolute top-28 right-16 h-16 w-16 rounded-full border border-primary/50" />
+          <div className="absolute bottom-36 left-10 h-24 w-24 rounded-full border border-white/20" />
+
+          <div className="absolute inset-x-0 bottom-0 flex justify-center pb-10">
+            <div className="relative">
+              <div className="absolute inset-0 blur-2xl bg-primary/20" />
+              <WaveMotif className="relative h-12 opacity-80" />
+            </div>
+          </div>
         </div>
 
-        {/* Right Sign-in Panel  */}
-        {/* <div className="flex-1 lg:w-1/2 flex items-center justify-center p-6 sm:p-8 lg:p-12 relative min-h-screen lg:min-h-0"> */}
-        <div className="flex-1 lg:w-1/2 flex items-center justify-center min-h-screen lg:min-h-0 px-6 sm:px-8 lg:px-12 relative">
-          {/* Decorative elements  */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-            {/* Large organic blobs */}
-            <div className="absolute -top-32 -right-32 w-120 h-120 lg:w-140 lg:h-140 bg-teal-light rounded-[60%_40%_75%_25%] blur-[110px] opacity-10" />
-            <div className="absolute -bottom-20 left-4 w-[320px] h-80 lg:w-105 lg:h-105 bg-teal rounded-[35%_70%_55%_45%] blur-[90px] opacity-8" />
+        <div className="relative flex min-h-screen flex-1 items-center justify-center px-6 sm:px-8 lg:min-h-0 lg:w-1/2 lg:px-12 bg-zinc-950">
+          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+            <div className="absolute -top-32 -right-32 h-120 w-120 rounded-[60%_40%_75%_25%] bg-primary/10 blur-[110px]" />
+            <div className="absolute -bottom-20 left-4 h-80 w-[320px] rounded-[35%_70%_55%_45%] bg-primary/5 blur-[90px]" />
           </div>
 
-          {/* Main content */}
           <motion.div
-            className="w-full max-w-105 mx-auto flex flex-col items-center justify-center relative z-10"
+            className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center justify-center"
             initial="hidden"
             animate="visible"
           >
             <motion.div
-              className="pt-9 md:pt-18 mb-10 text-center px-4"
+              className="mb-10 px-4 pt-9 text-center md:pt-16"
               variants={rightItem}
             >
-              <h2 className="text-3xl font-semibold text-abyss tracking-tight mb-3">
+              <h2 className="mb-3 text-3xl font-semibold tracking-tight text-white">
                 Create your account
               </h2>
-              <p className="text-abyss/70 text-[17px]">
+              <p className="text-[17px] text-zinc-400">
                 Start transcribing your audio and video into structured,
                 ready-to-use text.
               </p>
             </motion.div>
 
-            {/* Clerk SignIn Form */}
-            <motion.div variants={rightItem} className="px-1">
+            <motion.div variants={rightItem} className="px-1 w-full">
               <SignUp
                 appearance={{
+                  baseTheme: undefined,
                   elements: {
+                    rootBox: "w-full",
                     card: `
-                      bg-white/95 backdrop-blur-2xl
-                      shadow-2xl shadow-teal-950/10
-                      border border-[var(--color-teal-mist)]
-                      rounded-3xl
+                      bg-zinc-900/90 backdrop-blur-2xl
+                      shadow-2xl shadow-black/40
+                      border border-white/10
+                      rounded-2xl
                       overflow-hidden
                     `,
                     cardBox: "shadow-none",
-
                     headerTitle: `
-                      text-[var(--color-abyss)]
+                      text-white
                       font-semibold
                       tracking-tight
                       text-2xl
-                      font-['Plus_Jakarta_Sans']
                     `,
-                    headerSubtitle: "text-[var(--color-abyss)]/60 text-base",
-
-                    formFieldInput: `
-                      border-[var(--color-teal-mist)]
-                      focus:border-[var(--color-teal)]
-                      focus:ring-2 focus:ring-[var(--color-teal)]/30
-                      rounded-2xl
-                      py-3.5
-                      text-[var(--color-abyss)]
-                      font-medium
-                      placeholder:text-[var(--color-abyss)]/40
-                      transition-all
-                    `,
-
-                    formButtonPrimary: `
-                      bg-[var(--color-teal)]
-                      hover:bg-[var(--color-teal)]/95
-                      active:scale-[0.985]
-                      text-white
-                      font-semibold
-                      tracking-wide
-                      rounded-2xl
-                      py-3.5
-                      text-base
-                      shadow-lg shadow-teal-600/30
-                      transition-all duration-200
-                    `,
-
+                    headerSubtitle: "text-zinc-400 text-base",
                     socialButtonsBlockButton: `
-                      border border-[var(--color-teal-mist)]
-                      hover:bg-[var(--color-teal-surface)]
-                      rounded-2xl
+                      border border-white/10
+                      bg-zinc-900
+                      hover:bg-zinc-800
+                      text-zinc-100
+                      rounded-xl
                       py-3
                       transition-colors
                     `,
-
-                    footerActionLink: `
-                      text-[var(--color-teal)]
-                      hover:text-[var(--color-teal-light)]
+                    socialButtonsBlockButtonText: "text-zinc-100 font-medium",
+                    dividerLine: "bg-white/10",
+                    dividerText: "text-zinc-500",
+                    formFieldLabel: "text-zinc-300",
+                    formFieldInput: `
+                      bg-zinc-950
+                      border border-white/10
+                      focus:border-primary
+                      focus:ring-2 focus:ring-primary/30
+                      rounded-xl
+                      py-3.5
+                      text-zinc-100
                       font-medium
+                      placeholder:text-zinc-500
+                      transition-all
+                    `,
+                    formButtonPrimary: `
+                    !bg-[#e8e8e8]
+                    !text-[#0c0c0c]
+                    hover:!bg-[#cfcfcf]
+                    hover:!text-[#0c0c0c]
+                    active:scale-[0.985]
+                    font-semibold
+                    tracking-wide
+                    rounded-lg
+                    py-3.5
+                    text-base
+                    shadow-lg 
+                    shadow-black/30
+                    transition-all 
+                    duration-200
                     `,
 
-                    dividerLine: "bg-[var(--color-teal-mist)]",
-                    dividerText: "text-[var(--color-abyss)]/50",
+                    footerActionLink: `
+                      text-primary
+                      hover:text-primary/80
+                      font-medium
+                    `,
+                    footerActionText: "text-zinc-500",
+                    identityPreviewText: "text-zinc-300",
+                    identityPreviewEditButton: "text-primary",
                   },
                   layout: {
                     socialButtonsVariant: "blockButton",
+                  },
+                  variables: {
+                    colorBackground: "#09090b",
+                    colorInputBackground: "#09090b",
+                    colorInputText: "#f4f4f5",
+                    colorText: "#f4f4f5",
+                    colorTextSecondary: "#a1a1aa",
+                    colorPrimary: "#e8e8e8",
+                    borderRadius: "0.4rem",
                   },
                 }}
               />
             </motion.div>
 
             <motion.p
-              className="text-center mt-8 text-xs text-abyss/50 tracking-wide px-4"
+              className="mt-8 px-4 text-center font-mono text-[11px] uppercase tracking-[0.08em] text-zinc-500"
               variants={rightItem}
             >
-              Protected by Clerk • EchoNote © {new Date().getFullYear()}
+              Protected by Clerk · VondaScribe © {new Date().getFullYear()}
             </motion.p>
           </motion.div>
         </div>

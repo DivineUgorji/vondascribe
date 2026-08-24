@@ -3,10 +3,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
-/* Shared easing */
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/* Animated counter hook */
 function useCounter(
   target: number,
   duration: number,
@@ -38,7 +36,6 @@ function useCounter(
   return count;
 }
 
-/* Stat item */
 function StatItem({
   value,
   suffix,
@@ -68,7 +65,6 @@ function StatItem({
       transition={{ duration: 0.6, ease, delay }}
       className="flex flex-col items-center gap-2"
     >
-      {/* Value */}
       <div className="flex items-baseline gap-1">
         {prefix && (
           <span className="text-lg font-semibold text-foreground">
@@ -85,13 +81,11 @@ function StatItem({
         )}
       </div>
 
-      {/* Label */}
       <span className="text-[13px] text-muted-foreground">{label}</span>
     </motion.div>
   );
 }
 
-/* Divider */
 function Divider({ delay, inView }: { delay: number; inView: boolean }) {
   return (
     <motion.div
@@ -103,7 +97,6 @@ function Divider({ delay, inView }: { delay: number; inView: boolean }) {
   );
 }
 
-/* Main component */
 export default function SocialProof() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -126,8 +119,8 @@ export default function SocialProof() {
     <section
       ref={ref}
       className="relative w-full py-8 overflow-hidden bg-muted/40 border-y border-border"
+      id="social-proof"
     >
-      {/* Animated border lines */}
       <motion.div
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
@@ -141,7 +134,6 @@ export default function SocialProof() {
         className="absolute bottom-0 left-0 right-0 h-px bg-primary/20 origin-right"
       />
 
-      {/* Stats row */}
       <div className="relative max-w-5xl mx-auto px-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-8 sm:gap-4">
           {stats.map((stat, i) => (

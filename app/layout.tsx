@@ -19,8 +19,9 @@ const Dm_Mono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EchoNote",
-  description: "Ai powered audio and video transcription to text",
+  title: "VondaScribe",
+  description:
+    "Ai powered audio and video transcription to well formatted post",
 };
 
 export default function RootLayout({
@@ -29,13 +30,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up">
-      <html
-        lang="en"
-        className={`${DMSans.variable} ${Dm_Mono.variable} h-full antialiased`}
-        suppressHydrationWarning
-      >
-        <body className="min-h-full flex flex-col">
+    <html
+      lang="en"
+      className={`${DMSans.variable} ${Dm_Mono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+    >
+      <body className="min-h-full flex flex-col">
+        <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -47,8 +49,8 @@ export default function RootLayout({
               <Toaster />
             </main>
           </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

@@ -131,7 +131,6 @@ export default function UploadForm() {
     >
       <h4 className="mb-4">Recording details</h4>
 
-      {/* Drop zone */}
       <label
         htmlFor="file-upload"
         onDragEnter={(e) => handleDrag(e, true)}
@@ -200,7 +199,6 @@ export default function UploadForm() {
         )}
       </label>
 
-      {/* Title */}
       <div className="mt-6">
         <label
           htmlFor="title"

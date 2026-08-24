@@ -1,7 +1,3 @@
-// plain shared code, importable
-// from the client component (to reject bad files before they're ever sent)
-// and from the server action (as the authoritative check). One schema, one
-// set of rules, enforced in both places.
 import { z } from "zod";
 
 export const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB

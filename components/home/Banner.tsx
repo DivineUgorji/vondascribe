@@ -18,7 +18,6 @@ function fadeUp(delay: number) {
   } as const;
 }
 
-/* Floating stat pill — anchored to the image frame */
 function FloatingPill({
   icon,
   iconClassName,
@@ -86,7 +85,7 @@ function FloatingPill({
 export default function Banner() {
   return (
     <section className="relative w-full overflow-hidden bg-background px-6 py-14 md:py-20">
-      {/* ── Background embellishments */}
+      {/* Background */}
       <div className="pointer-events-none absolute top-0 right-0 w-150 h-100 rounded-full bg-primary/8 blur-[100px]" />
       <div
         className="pointer-events-none absolute inset-0 opacity-40"
@@ -98,7 +97,6 @@ export default function Banner() {
       />
 
       <div className="relative mx-auto max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-8 items-center">
-        {/* ── Left: text content */}
         <div className="flex flex-col items-start text-left order-1">
           <motion.div {...fadeUp(0)} className="flex items-center gap-2.5 mb-7">
             <span className="size-2 rounded-full bg-primary inline-block animate-pulse shrink-0" />
@@ -142,19 +140,25 @@ export default function Banner() {
             className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-10"
           >
             <Button
+              asChild
               size="lg"
-              className="bg-foreground hover:bg-foreground/90 text-background font-medium rounded-xl px-7 text-[15px] gap-2 transition-colors duration-200"
+              className="bg-foreground hover:bg-foreground/90 text-background font-medium rounded-lg px-7 py-5 text-[15px] gap-2 transition-colors duration-200"
             >
-              Start for free
-              <MoveRight className="size-4" />
+              <a href="#pricing">
+                Get started
+                <MoveRight className="size-4" />
+              </a>
             </Button>
             <Button
+              asChild
               size="lg"
               variant="outline"
-              className="rounded-xl px-7 text-[15px] font-medium border-border text-foreground hover:bg-accent hover:border-border transition-colors duration-200 gap-2"
+              className="rounded-lg px-7 py-5 text-[15px] font-medium border-border text-foreground hover:bg-accent hover:border-border transition-colors duration-200 gap-2"
             >
-              <Play className="size-3.5 fill-current" />
-              See how it works
+              <a href="#social-proof">
+                <Play className="size-3.5 fill-current" />
+                See how it works
+              </a>
             </Button>
           </motion.div>
 
@@ -167,25 +171,22 @@ export default function Banner() {
           </motion.div>
         </div>
 
-        {/* ── Right: framed image with floating stat pills */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease, delay: 0.4 }}
           className="relative order-2 w-full"
         >
-          {/* Browser bar mockup frame — drop your <Image src="..."> below */}
           <div className="rounded-2xl border border-border overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.45)] bg-card">
             <div className="bg-muted border-b border-border px-4 py-3 flex items-center gap-2">
               <span className="size-2.5 rounded-full bg-red-400" />
               <span className="size-2.5 rounded-full bg-yellow-400" />
               <span className="size-2.5 rounded-full bg-green-400" />
               <span className="ml-3 eyebrow normal-case">
-                echonote.app — workspace
+                vondascribe.app — workspace
               </span>
             </div>
 
-            {/* TODO: paste your generated image here */}
             <Image
               src={heroImg}
               alt="EchoNote app interface showing a user recording a transcription session"
@@ -197,7 +198,6 @@ export default function Banner() {
             />
           </div>
 
-          {/* Floating pills */}
           <FloatingPill
             icon={<Mic className="size-4" />}
             label="Processing"

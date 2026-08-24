@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!,
     );
-    console.log("✅ verified event:", event.type);
 
     switch (event.type) {
       case "payment_intent.succeeded":
@@ -68,7 +67,6 @@ export async function POST(request: NextRequest) {
         console.log(`Unhandled event type ${event.type}`);
     }
   } catch (err) {
-    console.error("❌ Webhook handler error:", err);
     return NextResponse.json(
       { status: "Failed", error: (err as Error).message },
       { status: 400 },

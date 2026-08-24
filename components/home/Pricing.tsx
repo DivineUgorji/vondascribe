@@ -1,4 +1,3 @@
-import React from "react";
 import { pricingPlanMap } from "@/lib/constants";
 import { Check } from "lucide-react";
 import Link from "next/link";
@@ -7,7 +6,6 @@ export default function Pricing() {
   return (
     <section className="relative px-6 py-9 md:py-18" id="pricing">
       <div className="relative max-w-5xl mx-auto">
-        {/* Header */}
         <div className="max-w-xl">
           <span className="inline-flex items-center gap-2 text-[11px] font-medium text-muted-foreground bg-muted border border-border px-3 py-1.5 rounded-full tracking-[0.06em] uppercase">
             <span className="size-1.5 rounded-full bg-primary" />
@@ -23,7 +21,6 @@ export default function Pricing() {
           </p>
         </div>
 
-        {/* Cards */}
         <ul className="mt-12 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {pricingPlanMap.map((plan) => {
             const isPopular = plan.tag === "Most popular";
@@ -39,7 +36,6 @@ export default function Pricing() {
                   }`}
               >
                 <div>
-                  {/* Tag */}
                   {plan.tag && (
                     <span
                       className={`inline-block text-[11px] px-3 py-1 rounded-full font-medium mb-5 tracking-wide
@@ -70,7 +66,6 @@ export default function Pricing() {
                     {plan.description}
                   </p>
 
-                  {/* Features */}
                   <ul className="mt-6 space-y-3.5">
                     {plan.features.map((feature: string, i: number) => (
                       <li
@@ -96,7 +91,6 @@ export default function Pricing() {
                   </ul>
                 </div>
 
-                {/* CTA */}
                 <Link href={plan.paymentLink} className="mt-8 block">
                   <button
                     className={`w-full rounded-lg py-2.5 text-sm font-medium transition-colors duration-200
