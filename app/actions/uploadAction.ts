@@ -2,7 +2,6 @@
 import OpenAI, { toFile } from "openai";
 import getDbConnection from "@/lib/database";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -10,9 +9,11 @@ const openai = new OpenAI({
 
 export async function transcribeUploadedFile({
   fileUrl,
+  fileName,
   userId,
 }: {
   fileUrl: string;
+  fileName: string;
   userId: string;
 }) {
   if (!userId || !fileUrl) {
@@ -34,17 +35,17 @@ export async function transcribeUploadedFile({
       };
     }
 
-    // 2. Convert the Response into a File that OpenAI accepts
     const blob = await response.blob();
-    const file = await toFile(blob, "recording.mp3");
-
-    // 3. Call Whisper
-    const transcription = await openai.audio.transcriptions.create({
-      model: "whisper-1",
-      file,
+    const contentType = response.headers.get("content-type") ?? blob.type;
+    const safeName = fileName?.trim() || "recording.mp3";
+    const file = await toFile(blob, safeName, {
+      type: contentType || undefined,
     });
 
-    console.log("Transcription result:", transcription);
+    const transcription = await openai.audio.transcriptions.create({
+      model: "gpt-4o-mini-transcribe",
+      file,
+    });
 
     return {
       success: true,
@@ -152,33 +153,33 @@ export async function generateBlogPostAction({
   transcriptions: { text: string };
   userId: string;
 }) {
-  const userPosts = await getUserBlogPosts(userId);
-
-  let postId = null;
-
-  if (transcriptions) {
-    const blogPost = await generateBlogPost({
-      transcriptions: transcriptions.text,
-      userPosts,
-    });
-
-    if (!blogPost) {
-      return {
-        success: false,
-        message: "Blog post generation failed, please try again...",
-      };
-    }
-
-    const [title, ...contentParts] = blogPost?.split("\n\n") || [];
-
-    //database connection
-
-    if (blogPost) {
-      postId = await saveBlogPost(userId, title, blogPost);
-    }
+  if (!transcriptions?.text) {
+    return { success: false, message: "No transcription text to work from." };
   }
 
-  //navigate
+  const userPosts = await getUserBlogPosts(userId);
+
+  const blogPost = await generateBlogPost({
+    transcriptions: transcriptions.text,
+    userPosts,
+  });
+
+  if (!blogPost) {
+    return {
+      success: false,
+      message: "Blog post generation failed, please try again...",
+    };
+  }
+
+  const [rawTitle] = blogPost.split("\n\n");
+  const title = rawTitle.replace(/^#+\s*/, "").trim() || "Untitled post";
+  const postId = await saveBlogPost(userId, title, blogPost);
+
   revalidatePath(`/transcripts/${postId}`);
-  redirect(`/transcripts/${postId}`);
+
+  return {
+    success: true,
+    postId,
+    message: "Post ready.",
+  };
 }

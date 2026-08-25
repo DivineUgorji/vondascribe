@@ -31,10 +31,9 @@ export async function saveTranscription(
     };
   }
 
-  const { fileUrl, userId } = validated.data;
+  const { fileUrl, fileName, userId } = validated.data;
 
-  const result = await transcribeUploadedFile({ userId, fileUrl });
-  console.log("Result from transcribeUploadedFile:", result);
+  const result = await transcribeUploadedFile({ userId, fileUrl, fileName });
   const { data = null, message = null } = result;
 
   if (!data || !message) {

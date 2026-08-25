@@ -17,8 +17,9 @@ export async function updatePostAction(data: {
 
   try {
     const sql = await getDbConnection();
-    const [title, ...contentParts] = content?.split("\n\n") || [];
-    const updatedTitle = title.split("#")[1].trim();
+    const [rawTitle, ...contentParts] = content?.split("\n\n") || [];
+    const updatedTitle =
+      rawTitle?.replace(/^#+\s*/, "").trim() || "Untitled post";
     await sql`UPDATE posts SET content = 
   ${content}, title = ${updatedTitle} where id = ${postId}`;
   } catch (error) {
@@ -28,7 +29,7 @@ export async function updatePostAction(data: {
     };
   }
 
-  revalidatePath("/transcripts/${postId}");
+  revalidatePath(`/transcripts/${postId}`);
   return {
     success: true,
   };

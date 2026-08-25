@@ -54,7 +54,7 @@ export default function ContentEditor({
     resolvedTheme === "dark" ? "dark-theme dark-editor-theme" : "";
 
   const [content, setContent] = useState(transcripts[0].content);
-  const [isChanged, setIsChanged] = useState(false);
+  // const [isChanged, setIsChanged] = useState(false);
 
   const updatePostActionWithId = updatePostAction.bind(null, {
     postId: transcripts[0].id,

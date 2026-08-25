@@ -1,14 +1,20 @@
 "use client";
 import React, { useCallback, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { UploadCloud, FileVideo, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
 import { useUploadThing } from "@/utils/uploadthing";
 import { uploadFileSchema, formatBytes } from "@/lib/schemas/upload-schema";
-import { saveTranscription } from "@/app/actions/handleFormAction";
+import {
+  transcribeUploadedFile,
+  generateBlogPostAction,
+} from "@/app/actions/uploadAction";
 
 const ACCEPTED_TYPES = "video/*, audio/*";
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function UploadForm() {
   const [dragActive, setDragActive] = useState(false);
@@ -19,6 +25,7 @@ export default function UploadForm() {
   }>({ file: null, title: "", notes: "" });
   const inputRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const { startUpload } = useUploadThing("videoOrImageUploader", {
     onUploadError: (err) => {
@@ -74,51 +81,66 @@ export default function UploadForm() {
     }
 
     const fileToUpload = form.file;
-    const { title, notes } = form;
 
     startTransition(async () => {
+      // Upload
+      toast.loading("Uploading recording…", { id: "upload" });
       const uploaded = await startUpload([fileToUpload]);
 
       if (!uploaded || uploaded.length === 0) {
-        toast.error("Upload failed. Please try again.");
+        toast.error("Upload failed. Please try again.", { id: "upload" });
         return;
       }
-
-      // const [{ ufsUrl, name, size }] = uploaded;
 
       const file = uploaded[0];
       const fileUrl = file.ufsUrl;
       const userId = file.serverData?.uploadedBy;
 
       if (!userId) {
-        toast.error("Could not identify user. Please try again.");
+        toast.error("Could not identify user. Please try again.", {
+          id: "upload",
+        });
         return;
       }
+      toast.success("Upload complete", { id: "upload" });
+      await wait(600);
 
-      const result = await saveTranscription({
-        // title,
-        // notes,
-        // fileUrl: ufsUrl,
-        // fileName: name,
-        // fileSize: size,
-        // userId,
-
-        title,
-        notes,
+      // Transcribe
+      toast.loading("Transcribing audio…", { id: "transcribe" });
+      const transcribed = await transcribeUploadedFile({
+        userId,
         fileUrl,
         fileName: file.name,
-        fileSize: file.size,
+      });
+
+      if (!transcribed.success || !transcribed.data) {
+        toast.error(transcribed.message ?? "Transcription failed.", {
+          id: "transcribe",
+        });
+        return;
+      }
+      toast.success("Transcription complete", { id: "transcribe" });
+      await wait(600);
+
+      // Generate blog post
+      toast.loading("Generating blog post…", { id: "generate" });
+      const post = await generateBlogPostAction({
+        transcriptions: { text: transcribed.data.text },
         userId,
       });
 
-      if (result.status === "error") {
-        toast.error(result.message);
+      if (!post.success) {
+        toast.error(post.message ?? "Couldn't generate the blog post.", {
+          id: "generate",
+        });
         return;
       }
+      toast.success("Post ready", { id: "generate" });
+      await wait(800);
 
-      toast.success(result.message);
       setForm({ file: null, title: "", notes: "" });
       if (inputRef.current) inputRef.current.value = "";
+      router.push(`/transcripts/${post.postId}`);
     });
   };
 
@@ -242,13 +264,13 @@ export default function UploadForm() {
       <div className="mt-6 flex items-center justify-between border-t border-border-faint pt-5">
         <p className="font-mono text-[11px] text-muted-foreground">
           {isPending
-            ? "Uploading…"
+            ? "Processing…"
             : file
               ? "Ready to transcribe"
               : "No file selected"}
         </p>
         <Button type="submit" disabled={!file || !title || isPending}>
-          {isPending ? "Uploading..." : "Upload & transcribe"}
+          {isPending ? "Processing…" : "Upload & transcribe"}
         </Button>
       </div>
     </form>
