@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { MoveRight, Play, Mic, FileText, Star } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import heroImg from "@/app/images/echonote-hero-4.png";
 
 /* Shared easing  */
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -38,7 +37,7 @@ function FloatingPill({
       initial={{ opacity: 0, scale: 0.88, y: 12 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.6, ease, delay }}
-      className={`absolute z-10 flex items-center gap-2.5 bg-card/95 backdrop-blur-sm
+      className={`absolute z-10 hidden md:flex items-center gap-2.5 bg-card/95 backdrop-blur-sm
         border border-border rounded-2xl px-4 py-2.5
         shadow-[0_8px_28px_rgba(0,0,0,0.4)] ${className}`}
     >
@@ -85,7 +84,6 @@ function FloatingPill({
 export default function Banner() {
   return (
     <section className="relative w-full overflow-hidden bg-background px-6 py-14 md:py-20">
-      {/* Background */}
       <div className="pointer-events-none absolute top-0 right-0 w-150 h-100 rounded-full bg-primary/8 blur-[100px]" />
       <div
         className="pointer-events-none absolute inset-0 opacity-40"
@@ -130,7 +128,7 @@ export default function Banner() {
             {...fadeUp(0.2)}
             className="text-base md:text-lg leading-[1.7] text-muted-foreground max-w-110 mb-9"
           >
-            Upload any video or audio file and EchoNote transcribes it
+            Upload any video or audio file and VondaScribe transcribes it
             instantly, turning it into clean, publish-ready text or a full blog
             post — no manual editing required.
           </motion.p>
@@ -188,8 +186,8 @@ export default function Banner() {
             </div>
 
             <Image
-              src={heroImg}
-              alt="EchoNote app interface showing a user recording a transcription session"
+              src="/vondascribe-hero.png"
+              alt="VondaScribe app interface showing a user recording a transcription session"
               width={800}
               height={640}
               className="w-full h-auto object-cover object-top"

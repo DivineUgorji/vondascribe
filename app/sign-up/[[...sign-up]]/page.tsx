@@ -1,6 +1,6 @@
 "use client";
 
-import EchonoteDot from "@/components/icons/EchonoteDot";
+import EchonoteDot from "@/components/icons/VondaScribeDot";
 import { SignUp } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 

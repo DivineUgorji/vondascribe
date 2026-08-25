@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Show, UserButton } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
-import EchonoteDot from "../icons/EchonoteDot";
+import EchonoteDot from "../icons/VondaScribeDot";
 import { ModeToggleButton } from "../ModeToggleButton";
 import { Button } from "../ui/button";
 import {
