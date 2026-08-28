@@ -77,7 +77,7 @@ export default function SignInPage() {
             >
               <EchonoteDot className="h-14 w-14 text-primary" />
               <h1 className="text-5xl font-bold tracking-tighter text-white">
-                EchoNote
+                VondaScribe
               </h1>
             </motion.div>
 
@@ -101,7 +101,6 @@ export default function SignInPage() {
 
           <div className="absolute top-28 right-16 h-16 w-16 rounded-full border border-primary/50" />
           <div className="absolute bottom-36 left-10 h-24 w-24 rounded-full border border-white/20" />
-
           <div className="absolute inset-x-0 bottom-0 flex justify-center pb-10">
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 blur-2xl" />
@@ -225,7 +224,7 @@ export default function SignInPage() {
               className="mt-8 px-4 text-center font-mono text-[11px] uppercase tracking-[0.08em] text-zinc-500"
               variants={rightItem}
             >
-              Protected by Clerk · EchoNote © {new Date().getFullYear()}
+              Protected by Clerk · VondaScribe © {new Date().getFullYear()}
             </motion.p>
           </motion.div>
         </div>

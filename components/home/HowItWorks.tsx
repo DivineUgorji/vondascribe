@@ -60,7 +60,6 @@ function StepCard({
         {step}
       </div>
 
-      {/* Icon container */}
       <div className="relative mb-6">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
@@ -75,7 +74,6 @@ function StepCard({
           />
         </motion.div>
 
-        {/* Step badge — primary used surgically */}
         <div className="absolute -top-2 -right-2 size-5 rounded-full bg-primary flex items-center justify-center">
           <span className="text-[9px] font-bold text-primary-foreground">
             {step.replace("0", "")}
@@ -83,7 +81,6 @@ function StepCard({
         </div>
       </div>
 
-      {/* Text */}
       <div className="flex flex-col gap-2.5">
         <h3 className="text-[17px] font-semibold text-foreground tracking-[-0.02em]">
           {title}
@@ -92,7 +89,6 @@ function StepCard({
           {description}
         </p>
 
-        {/* Detail pill */}
         <div className="mt-1 inline-flex self-center lg:self-start">
           <span className="text-[11px] font-medium text-muted-foreground bg-muted border border-border px-3 py-1 rounded-full">
             {detail}
@@ -103,7 +99,6 @@ function StepCard({
   );
 }
 
-/* Main component */
 export default function HowItWorks() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -114,9 +109,7 @@ export default function HowItWorks() {
       className="relative w-full py-9 md:py-18 px-6 overflow-hidden"
     >
       <div className="relative max-w-5xl mx-auto">
-        {/* Section header */}
         <div className="mb-20 flex flex-col items-center text-center">
-          {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -129,7 +122,6 @@ export default function HowItWorks() {
             </span>
           </motion.div>
 
-          {/* Heading */}
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -140,7 +132,6 @@ export default function HowItWorks() {
             <span className="text-primary">recording to published</span>
           </motion.h2>
 
-          {/* Subheading */}
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -152,7 +143,6 @@ export default function HowItWorks() {
           </motion.p>
         </div>
 
-        {/* Steps wrapper */}
         <div className="relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -160,7 +150,6 @@ export default function HowItWorks() {
             transition={{ duration: 0.7, ease, delay: 0.15 }}
             className="relative bg-card border border-border rounded-3xl px-10 py-14 overflow-hidden"
           >
-            {/* Steps row */}
             <div className="relative flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-0">
               {steps.map((step, i) => (
                 <div key={step.step} className="contents">
@@ -181,7 +170,6 @@ export default function HowItWorks() {
             </div>
           </motion.div>
 
-          {/* Bottom CTA hint */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}

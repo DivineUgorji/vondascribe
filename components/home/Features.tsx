@@ -28,7 +28,6 @@ function FeatureCard({
       className="group relative bg-card border border-border rounded-2xl p-7 flex flex-col gap-5 overflow-hidden
         hover:border-border-faint hover:shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-all duration-300"
     >
-      {/* Icon */}
       <div
         className="relative size-11 rounded-xl bg-muted border border-border flex items-center justify-center text-muted-foreground
         group-hover:text-foreground transition-colors duration-300"
@@ -36,7 +35,6 @@ function FeatureCard({
         <Icon className="size-4.5" strokeWidth={1.8} />
       </div>
 
-      {/* Text */}
       <div className="flex flex-col gap-2">
         <h3 className="text-[15px] font-semibold text-foreground tracking-[-0.01em]">
           {title}
@@ -49,7 +47,6 @@ function FeatureCard({
   );
 }
 
-/* Main component */
 export default function Features() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -57,9 +54,7 @@ export default function Features() {
   return (
     <section ref={ref} className="relative w-full py-24 px-6 overflow-hidden">
       <div className="relative max-w-5xl mx-auto">
-        {/* Section header */}
         <div className="mb-14">
-          {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -72,7 +67,6 @@ export default function Features() {
             </span>
           </motion.div>
 
-          {/* Heading */}
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -83,7 +77,6 @@ export default function Features() {
             <span className="text-primary">audio to article</span>
           </motion.h2>
 
-          {/* Subheading */}
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -95,7 +88,6 @@ export default function Features() {
           </motion.p>
         </div>
 
-        {/* Feature grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((feature, i) => (
             <FeatureCard

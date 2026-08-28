@@ -2,7 +2,7 @@
 import React, { useCallback, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { UploadCloud, FileVideo, X } from "lucide-react";
+import { UploadCloud, FileVideo, X, Lock } from "lucide-react";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
 import { useUploadThing } from "@/utils/uploadthing";
@@ -11,12 +11,19 @@ import {
   transcribeUploadedFile,
   generateBlogPostAction,
 } from "@/app/actions/uploadAction";
+import Link from "next/link";
 
 const ACCEPTED_TYPES = "video/*, audio/*";
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export default function UploadForm() {
+export default function UploadForm({
+  email,
+  canUpload,
+}: {
+  email: string;
+  canUpload: boolean;
+}) {
   const [dragActive, setDragActive] = useState(false);
   const [form, setForm] = useState<{
     file: File | null;
@@ -67,6 +74,11 @@ export default function UploadForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!canUpload) {
+      toast.error("You've used your free uploads — upgrade to keep going.");
+      return;
+    }
+
     if (!form.file) {
       toast.error("Select a file before uploading.");
       return;
@@ -111,6 +123,7 @@ export default function UploadForm() {
         userId,
         fileUrl,
         fileName: file.name,
+        email,
       });
 
       if (!transcribed.success || !transcribed.data) {
@@ -145,6 +158,24 @@ export default function UploadForm() {
   };
 
   const { file, title, notes } = form;
+
+  if (!canUpload) {
+    return (
+      <div className="rounded-2xl border border-border bg-card p-6 lg:col-span-2 flex flex-col items-center justify-center text-center py-16">
+        <div className="size-11 rounded-full bg-muted flex items-center justify-center mb-4">
+          <Lock className="size-5 text-muted-foreground" />
+        </div>
+        <h4 className="mb-2">You&apos;ve used your free uploads</h4>
+        <p className="text-sm text-muted-foreground max-w-sm mb-6">
+          Upgrade to a paid plan to keep transcribing recordings and generating
+          blog posts.
+        </p>
+        <Link href="/#pricing">
+          <Button size="lg">See plans</Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -256,7 +287,7 @@ export default function UploadForm() {
             setForm((prev) => ({ ...prev, notes: e.target.value }))
           }
           rows={3}
-          placeholder="Anything EchoNote should know about this recording"
+          placeholder="Anything VondaScribe should know about this recording"
           className="w-full resize-none rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-primary focus:outline-none focus:ring-1 focus:ring-ring"
         />
       </div>

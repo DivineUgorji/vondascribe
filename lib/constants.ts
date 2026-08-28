@@ -1,20 +1,21 @@
+export const FREE_UPLOAD_LIMIT = 2;
+
 export const pricingPlanMap = [
   {
-    id: "starter",
-    name: "Starter",
-    price: 15,
+    id: "free",
+    name: "Free",
+    price: 0,
     tag: "Free",
-    description: "Perfect for trying it out.",
+    description: "Try it out, no card required.",
     features: [
+      `${FREE_UPLOAD_LIMIT} uploads to try it out`,
       "60 minutes / month",
       "Transcript export",
-      "3 blog post generations",
+      "2 blog post generations",
     ],
-    cta: "Get started — $15/mo",
-    paymentLink: process.env.NEXT_PUBLIC_STRIPE_STARTER_PAYMENT_LINK || "",
-    priceId: process.env.STRIPE_STARTER_PRICE_ID || "",
+    cta: "Start for free",
+    priceId: "",
   },
-
   {
     id: "pro",
     name: "Pro",
@@ -29,10 +30,8 @@ export const pricingPlanMap = [
       "Priority processing",
     ],
     cta: "Start Pro — $25/mo",
-    paymentLink: process.env.NEXT_PUBLIC_STRIPE_PRO_PAYMENT_LINK || "",
     priceId: process.env.STRIPE_PRO_PRICE_ID || "",
   },
-
   {
     id: "team",
     name: "Team",
@@ -46,7 +45,7 @@ export const pricingPlanMap = [
       "API access",
       "Dedicated support",
     ],
-    cta: "Contact sales",
-    paymentLink: "/",
+    cta: "Start Team — $75/mo",
+    priceId: process.env.STRIPE_ENTERPRISE_PRICE_ID || "",
   },
 ];

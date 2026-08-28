@@ -41,8 +41,8 @@ export default function RootLayout({
         <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up">
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="dark"
+            enableSystem={false}
             disableTransitionOnChange
           >
             <NavigationProgressProvider>{children}</NavigationProgressProvider>

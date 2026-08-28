@@ -2,6 +2,9 @@
 import OpenAI, { toFile } from "openai";
 import getDbConnection from "@/lib/database";
 import { revalidatePath } from "next/cache";
+import { getUserSubscription } from "@/lib/payment-helpers";
+import { getUploadCount } from "@/lib/usage-helpers";
+import { FREE_UPLOAD_LIMIT } from "@/lib/constants";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,10 +14,12 @@ export async function transcribeUploadedFile({
   fileUrl,
   fileName,
   userId,
+  email,
 }: {
   fileUrl: string;
   fileName: string;
   userId: string;
+  email: string;
 }) {
   if (!userId || !fileUrl) {
     return {
@@ -22,6 +27,19 @@ export async function transcribeUploadedFile({
       message: "Missing userId or fileUrl",
       data: null,
     };
+  }
+
+  const sql = await getDbConnection();
+  const subscription = await getUserSubscription(sql, email);
+  if (subscription?.status !== "active") {
+    const uploadCount = await getUploadCount(sql, userId);
+    if (uploadCount >= FREE_UPLOAD_LIMIT) {
+      return {
+        success: false,
+        message: "You've used your free uploads. Upgrade to keep transcribing.",
+        data: null,
+      };
+    }
   }
 
   try {
@@ -42,6 +60,7 @@ export async function transcribeUploadedFile({
       type: contentType || undefined,
     });
 
+    // 3. Transcribe — gpt-4o-mini-transcribe:
     const transcription = await openai.audio.transcriptions.create({
       model: "gpt-4o-mini-transcribe",
       file,

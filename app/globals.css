@@ -23,7 +23,7 @@ html {
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* ── Brand colors (literal, theme-independent) */
+  /* ── Brand colors */
   --color-ink: #0c0c0c;
   --color-slate: #1a1a1a;
   --color-stone: #333333;

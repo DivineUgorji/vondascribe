@@ -1,6 +1,12 @@
 import Stripe from "stripe";
 import getDbConnection, { type Sql } from "./database";
 
+export async function getUserSubscription(sql: Sql, email: string) {
+  const [user] =
+    await sql`SELECT status, price_id FROM users WHERE email = ${email}`;
+  return user ?? null;
+}
+
 export async function handleSubscriptionDeleted({
   subscriptionId,
   stripe,
@@ -28,6 +34,7 @@ export async function handleCheckoutSessionCompleted({
   const priceId = session.line_items?.data[0]?.price?.id;
   const email = session.customer_details?.email;
   const name = session.customer_details?.name ?? null;
+  const clerkUserId = session.client_reference_id ?? null;
 
   if (!priceId || !email) {
     console.error("Missing priceId or email on completed session", {
@@ -40,9 +47,6 @@ export async function handleCheckoutSessionCompleted({
 
   const sql = await getDbConnection();
 
-  // The session may not have a Customer attached (e.g. guest checkout via
-  // a Payment Link without customer_creation set). Create one if missing so
-  // customer_id is always populated in the users table.
   let customerId = session.customer as string | null;
   if (!customerId) {
     const created = await stripe.customers.create({
@@ -52,11 +56,13 @@ export async function handleCheckoutSessionCompleted({
     customerId = created.id;
   }
 
-  await createOrUpdateUser(sql, { email, name }, customerId);
-  //update user subscription
+  await createOrUpdateUser(sql, { email, name, clerkUserId }, customerId);
+
   await updateUserSubscription(sql, priceId, email);
-  //insert the payment
+
   await insertPayment(sql, session, priceId, email);
+
+  // revalidatePath("/dashboard");
 }
 
 async function insertPayment(
@@ -75,13 +81,15 @@ async function insertPayment(
 
 async function createOrUpdateUser(
   sql: Sql,
-  customer: { email: string; name: string | null },
+  customer: { email: string; name: string | null; clerkUserId: string | null },
   customerId: string,
 ) {
   try {
     const user = await sql`SELECT * FROM users WHERE email = ${customer.email}`;
     if (user.length === 0) {
-      await sql`INSERT INTO users (email, full_name, customer_id) VALUES (${customer.email}, ${customer.name}, ${customerId})`;
+      await sql`INSERT INTO users (email, full_name, customer_id, user_id) VALUES (${customer.email}, ${customer.name}, ${customerId}, ${customer.clerkUserId})`;
+    } else if (customer.clerkUserId) {
+      await sql`UPDATE users SET user_id = ${customer.clerkUserId} WHERE email = ${customer.email}`;
     }
   } catch (err) {
     console.error("Error in inserting user", err);

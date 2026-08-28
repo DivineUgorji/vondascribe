@@ -1,6 +1,18 @@
 import UploadForm from "@/components/UploadForm";
 
-export default function UploadDashboard({ userName }: { userName: string }) {
+export default function UploadDashboard({
+  userName,
+  email,
+  canUpload,
+  uploadsRemaining,
+  isSubscribed,
+}: {
+  userName: string;
+  email: string;
+  canUpload: boolean;
+  uploadsRemaining: number | null;
+  isSubscribed: boolean;
+}) {
   return (
     <>
       <div className="mb-10 flex items-start justify-between gap-6">
@@ -8,14 +20,21 @@ export default function UploadDashboard({ userName }: { userName: string }) {
           <span className="eyebrow">Dashboard</span>
           <h1 className="mt-2">Welcome back, {userName}</h1>
           <p className="lead mt-3 max-w-md">
-            Drop in a video or audio file and EchoNote will turn it into a
+            Drop in a video or audio file and VondaScribe will turn it into a
             clean, searchable transcript.
           </p>
+          {!isSubscribed && uploadsRemaining !== null && (
+            <p className="mt-2 text-[13px] font-mono text-muted-foreground">
+              {uploadsRemaining > 0
+                ? `${uploadsRemaining} free upload${uploadsRemaining === 1 ? "" : "s"} remaining`
+                : "You've used your free uploads"}
+            </p>
+          )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <UploadForm />
+        <UploadForm email={email} canUpload={canUpload} />
 
         <aside className="flex flex-col gap-6">
           <div className="rounded-2xl border border-border bg-card p-6">

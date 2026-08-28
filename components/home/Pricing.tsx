@@ -1,6 +1,7 @@
 import { pricingPlanMap } from "@/lib/constants";
 import { Check } from "lucide-react";
 import Link from "next/link";
+import { SubscribeButton } from "@/components/SubscribeButton";
 
 export default function Pricing() {
   return (
@@ -21,14 +22,19 @@ export default function Pricing() {
           </p>
         </div>
 
-        <ul className="mt-12 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        <ul className="mt-12 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {pricingPlanMap.map((plan) => {
             const isPopular = plan.tag === "Most popular";
+            const buttonClassName = `w-full rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 ${
+              isPopular
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "border border-border bg-transparent text-foreground hover:bg-muted"
+            }`;
 
             return (
               <li
                 key={plan.id}
-                className={`relative rounded-2xl border p-6 flex flex-col justify-between min-h-130 transition-all duration-300
+                className={`relative rounded-2xl border p-6 flex flex-col justify-between min-h-[520px] transition-all duration-300
                   ${
                     isPopular
                       ? "bg-card border-primary/40 shadow-[0_0_0_1px_rgba(255,60,60,0.12)]"
@@ -91,18 +97,20 @@ export default function Pricing() {
                   </ul>
                 </div>
 
-                <Link href={plan.paymentLink} className="mt-8 block">
-                  <button
-                    className={`w-full rounded-lg py-2.5 text-sm font-medium transition-colors duration-200
-                      ${
-                        isPopular
-                          ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                          : "border border-border bg-transparent text-foreground hover:bg-muted"
-                      }`}
-                  >
-                    {plan.cta}
-                  </button>
-                </Link>
+                <div className="mt-8">
+                  {plan.priceId ? (
+                    <SubscribeButton
+                      priceId={plan.priceId}
+                      className={buttonClassName}
+                    >
+                      {plan.cta}
+                    </SubscribeButton>
+                  ) : (
+                    <Link href="/sign-up" className="block">
+                      <button className={buttonClassName}>{plan.cta}</button>
+                    </Link>
+                  )}
+                </div>
               </li>
             );
           })}
