@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "VondaScribe",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "VondaScribe",
@@ -45,7 +45,14 @@ export const metadata: Metadata = {
     title: "VondaScribe",
     description:
       "AI-powered audio and video transcription into well-formatted posts",
-    images: ["/og-image.png"],
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "VondaScribe",
+      },
+    ],
   },
 };
 
