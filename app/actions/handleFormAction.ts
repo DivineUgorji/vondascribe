@@ -15,6 +15,7 @@ const metadataSchema = z.object({
   fileName: z.string(),
   fileSize: z.number(),
   userId: z.string().min(1),
+  email: z.string().email(),
 });
 
 export type TranscribeMetadata = z.infer<typeof metadataSchema>;
@@ -31,9 +32,14 @@ export async function saveTranscription(
     };
   }
 
-  const { fileUrl, fileName, userId } = validated.data;
+  const { fileUrl, fileName, userId, email } = validated.data;
 
-  const result = await transcribeUploadedFile({ userId, fileUrl, fileName });
+  const result = await transcribeUploadedFile({
+    userId,
+    fileUrl,
+    fileName,
+    email,
+  });
   const { data = null, message = null } = result;
 
   if (!data || !message) {
