@@ -20,9 +20,33 @@ const Dm_Mono = DM_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://vondascribe.vercel.app"),
   title: "VondaScribe",
   description:
-    "Ai powered audio and video transcription to well formatted post",
+    "AI-powered audio and video transcription into well-formatted posts",
+  openGraph: {
+    title: "VondaScribe",
+    description:
+      "AI-powered audio and video transcription into well-formatted posts",
+    url: "https://vondascribe.vercel.app",
+    siteName: "VondaScribe",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "VondaScribe",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VondaScribe",
+    description:
+      "AI-powered audio and video transcription into well-formatted posts",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
