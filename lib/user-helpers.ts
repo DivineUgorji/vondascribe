@@ -11,11 +11,16 @@ export async function hasCancelledSubscription(
   return query && query.length > 0;
 }
 
-export function getPlanType(priceId: string) {
-  const checkPlanType = pricingPlanMap.filter(
-    (plan) => plan.priceId === priceId,
-  );
-  return checkPlanType?.[0].id || "starter";
+// export function getPlanType(priceId: string) {
+//   const checkPlanType = pricingPlanMap.filter(
+//     (plan) => plan.priceId === priceId,
+//   );
+//   return checkPlanType?.[0].id || "starter";
+// }
+
+export function getPlanType(priceId: string | null) {
+  const plan = pricingPlanMap.find((plan) => plan.priceId === priceId);
+  return plan?.id ?? "starter";
 }
 
 export async function updateUser(
