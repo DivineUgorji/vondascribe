@@ -49,6 +49,7 @@ export default async function Dashboard({
   await updateUser(sql, clerkUser.id, email);
 
   const isSubscribed = subscription?.status === "active";
+  const isCancelled = subscription?.status === "cancelled";
 
   const uploadCount = isSubscribed
     ? 0
@@ -69,6 +70,7 @@ export default async function Dashboard({
       canUpload={canUpload}
       uploadsRemaining={uploadsRemaining}
       isSubscribed={isSubscribed}
+      isCancelled={isCancelled}
     />
   );
 }

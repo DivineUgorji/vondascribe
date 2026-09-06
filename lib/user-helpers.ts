@@ -11,16 +11,9 @@ export async function hasCancelledSubscription(
   return query && query.length > 0;
 }
 
-// export function getPlanType(priceId: string) {
-//   const checkPlanType = pricingPlanMap.filter(
-//     (plan) => plan.priceId === priceId,
-//   );
-//   return checkPlanType?.[0].id || "starter";
-// }
-
 export function getPlanType(priceId: string | null) {
   const plan = pricingPlanMap.find((plan) => plan.priceId === priceId);
-  return plan?.id ?? "starter";
+  return plan?.id ?? "free";
 }
 
 export async function updateUser(
@@ -28,7 +21,12 @@ export async function updateUser(
   userId: string,
   email: string,
 ) {
-  return await sql`UPDATE users SET user_id = ${userId} WHERE email = ${email}`;
+  return await sql`
+    INSERT INTO users (email, user_id, status)
+    VALUES (${email}, ${userId}, 'free')
+    ON CONFLICT (email)
+    DO UPDATE SET user_id = EXCLUDED.user_id
+  `;
 }
 
 export async function doesUserExist(

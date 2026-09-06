@@ -85,12 +85,15 @@ async function createOrUpdateUser(
   customerId: string,
 ) {
   try {
-    const user = await sql`SELECT * FROM users WHERE email = ${customer.email}`;
-    if (user.length === 0) {
-      await sql`INSERT INTO users (email, full_name, customer_id, user_id) VALUES (${customer.email}, ${customer.name}, ${customerId}, ${customer.clerkUserId})`;
-    } else if (customer.clerkUserId) {
-      await sql`UPDATE users SET user_id = ${customer.clerkUserId} WHERE email = ${customer.email}`;
-    }
+    await sql`
+      INSERT INTO users (email, full_name, customer_id, user_id, status)
+      VALUES (${customer.email}, ${customer.name}, ${customerId}, ${customer.clerkUserId}, 'free')
+      ON CONFLICT (email)
+      DO UPDATE SET
+        full_name = COALESCE(EXCLUDED.full_name, users.full_name),
+        customer_id = EXCLUDED.customer_id,
+        user_id = COALESCE(EXCLUDED.user_id, users.user_id)
+    `;
   } catch (err) {
     console.error("Error in inserting user", err);
     throw err;

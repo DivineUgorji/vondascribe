@@ -15,7 +15,8 @@ import {
 } from "../ui/sheet";
 import { TransitionLink } from "../navigation-progress";
 
-export type PlanType = "starter" | "basic" | "pro";
+// export type PlanType = "starter" | "basic" | "pro";
+export type PlanType = "free" | "pro" | "team" | "cancelled";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard" },
@@ -60,8 +61,17 @@ export default function AppHeader({ planType }: { planType: PlanType }) {
         </nav>
 
         <div className="flex items-center gap-3">
-          <span className="hidden font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground sm:inline">
+          {/* <span className="hidden font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground sm:inline">
             {planType} plan
+          </span> */}
+          <span
+            className={`hidden font-mono text-[11px] uppercase tracking-[0.08em] sm:inline ${
+              planType === "cancelled"
+                ? "text-amber-500"
+                : "text-muted-foreground"
+            }`}
+          >
+            {planType === "cancelled" ? "Cancelled" : `${planType} plan`}
           </span>
           <UserButton />
 

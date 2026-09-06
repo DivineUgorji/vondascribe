@@ -6,12 +6,14 @@ export default function UploadDashboard({
   canUpload,
   uploadsRemaining,
   isSubscribed,
+  isCancelled,
 }: {
   userName: string;
   email: string;
   canUpload: boolean;
   uploadsRemaining: number | null;
   isSubscribed: boolean;
+  isCancelled: boolean;
 }) {
   return (
     <>
@@ -23,6 +25,18 @@ export default function UploadDashboard({
             Drop in a video or audio file and VondaScribe will turn it into a
             clean, searchable transcript.
           </p>
+          {/* {!isSubscribed && uploadsRemaining !== null && (
+            <p className="mt-2 text-[13px] font-mono text-muted-foreground">
+              {uploadsRemaining > 0
+                ? `${uploadsRemaining} free upload${uploadsRemaining === 1 ? "" : "s"} remaining`
+                : "You've used your free uploads"}
+            </p>
+          )} */}
+          {isCancelled && (
+            <p className="mt-2 text-[13px] font-mono text-amber-500">
+              Your subscription was cancelled.
+            </p>
+          )}
           {!isSubscribed && uploadsRemaining !== null && (
             <p className="mt-2 text-[13px] font-mono text-muted-foreground">
               {uploadsRemaining > 0

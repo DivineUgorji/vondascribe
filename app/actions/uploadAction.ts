@@ -29,16 +29,29 @@ export async function transcribeUploadedFile({
     };
   }
 
+  // const sql = await getDbConnection();
+  // const subscription = await getUserSubscription(sql, email);
+  // if (subscription?.status !== "active") {
+  //   const uploadCount = await getUploadCount(sql, userId);
+  //   if (uploadCount >= FREE_UPLOAD_LIMIT) {
+  //     return {
+  //       success: false,
+  //       message: "You've used your free uploads. Upgrade to keep transcribing.",
+  //       data: null,
+  //     };
+  //   }
+  // }
+
   const sql = await getDbConnection();
   const subscription = await getUserSubscription(sql, email);
   if (subscription?.status !== "active") {
     const uploadCount = await getUploadCount(sql, userId);
     if (uploadCount >= FREE_UPLOAD_LIMIT) {
-      return {
-        success: false,
-        message: "You've used your free uploads. Upgrade to keep transcribing.",
-        data: null,
-      };
+      const message =
+        subscription?.status === "cancelled"
+          ? "Your subscription was cancelled and you've used your free uploads. Resubscribe to keep transcribing."
+          : "You've used your free uploads. Upgrade to keep transcribing.";
+      return { success: false, message, data: null };
     }
   }
 
