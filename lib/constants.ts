@@ -29,7 +29,8 @@ export const pricingPlanMap = [
       "Smart summaries",
       "Priority processing",
     ],
-    cta: "Start Pro — $25/mo",
+    // cta: "Start Pro — $25/mo",
+    cta: "Get started",
     priceId: process.env.STRIPE_PRO_PRICE_ID || "",
   },
   {
@@ -45,7 +46,8 @@ export const pricingPlanMap = [
       "API access",
       "Dedicated support",
     ],
-    cta: "Start Team — $75/mo",
+    // cta: "Start Team — $75/mo",
+    cta: "Get started",
     priceId: process.env.STRIPE_ENTERPRISE_PRICE_ID || "",
   },
 ];
