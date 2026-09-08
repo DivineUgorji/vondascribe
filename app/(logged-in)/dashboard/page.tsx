@@ -1,15 +1,13 @@
 import getDbConnection from "@/lib/database";
 import { updateUser } from "@/lib/user-helpers";
-import {
-  getUserSubscription,
-  handleCheckoutSessionCompleted,
-} from "@/lib/payment-helpers";
+import { getUserSubscription } from "@/lib/payment-helpers";
 import { getUploadCount } from "@/lib/usage-helpers";
 import { FREE_UPLOAD_LIMIT } from "@/lib/constants";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { stripe } from "@/lib/stripe";
+
 import UploadDashboard from "@/app/(logged-in)/dashboard/upload-dashboard";
+import FinalizingCheckout from "./finalizing-checkout";
 
 export default async function Dashboard({
   searchParams,
@@ -25,25 +23,15 @@ export default async function Dashboard({
   const email = clerkUser.emailAddresses[0]?.emailAddress ?? "";
   const sql = await getDbConnection();
 
-  let subscription = await getUserSubscription(sql, email);
+  const subscription = await getUserSubscription(sql, email);
 
   const { session_id } = await searchParams;
 
   if (session_id) {
-    const session = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ["line_items"],
-    });
-
-    if (session.payment_status === "paid") {
-      await handleCheckoutSessionCompleted({
-        session,
-        stripe,
-      });
-
-      subscription = await getUserSubscription(sql, email);
+    if (subscription?.status === "active") {
+      redirect("/dashboard");
     }
-
-    redirect("/dashboard");
+    return <FinalizingCheckout />;
   }
 
   await updateUser(sql, clerkUser.id, email);

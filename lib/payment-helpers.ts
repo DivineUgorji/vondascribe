@@ -72,7 +72,11 @@ async function insertPayment(
   customerEmail: string,
 ) {
   try {
-    await sql`INSERT INTO payments (amount, status, stripe_payment_id, price_id, user_email) VALUES (${session.amount_total}, ${session.status}, ${session.id}, ${priceId}, ${customerEmail})`;
+    await sql`
+      INSERT INTO payments (amount, status, stripe_payment_id, price_id, user_email)
+      VALUES (${session.amount_total}, ${session.status}, ${session.id}, ${priceId}, ${customerEmail})
+      ON CONFLICT (stripe_payment_id) DO NOTHING
+    `;
   } catch (err) {
     console.error("Error in inserting payment", err);
     throw err;
