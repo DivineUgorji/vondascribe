@@ -20,7 +20,7 @@ const Dm_Mono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vondascribe.vercel.app"),
+  metadataBase: new URL("https://www.vondascribe.site/"),
   title: "VondaScribe",
   description:
     "AI-powered audio and video transcription into well-formatted posts",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: "VondaScribe",
     description:
       "AI-powered audio and video transcription into well-formatted posts",
-    url: "https://vondascribe.vercel.app",
+    url: "https://www.vondascribe.site",
     siteName: "VondaScribe",
     images: [
       {
